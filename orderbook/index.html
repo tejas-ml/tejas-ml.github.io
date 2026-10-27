@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Orderbook</title>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --fg: #2b2b2b;
+    --muted: #7a766e;
+    --border: #cfc9bd;
+    --row: #ece9e1;
+  }
+  [data-theme="dark"] {
+    --bg: #1c1f24;
+    --fg: #d6d3cc;
+    --muted: #8b8f96;
+    --border: #3a3f47;
+    --row: #23272e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Courier New", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+
+  header {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  button {
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  button:hover { background: var(--fg); color: var(--bg); }
+
+  .controls { display: flex; gap: 8px; align-items: center; }
+
+  a.nav {
+    font-family: inherit;
+    color: var(--fg);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  a.nav:hover { background: var(--fg); color: var(--bg); }
+
+  .forms {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  form {
+    flex: 1;
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  form h2 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  label { font-size: 12px; color: var(--muted); }
+
+  input {
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 6px;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .book {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .side {
+    flex: 1;
+    border: 1px solid var(--border);
+  }
+
+  .side h2 {
+    margin: 0;
+    padding: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px 10px; text-align: right; }
+  th {
+    color: var(--muted);
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  tbody tr:nth-child(even) { background: var(--row); }
+
+  .empty { text-align: center; color: var(--muted); padding: 16px; }
+
+  .spread {
+    width: 100%;
+    max-width: 760px;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Virtual Orderbook</h1>
+    <div class="controls">
+      <a class="nav" href="arbitrage.html">Arbitrage</a>
+      <button id="themeBtn" type="button">Dark Mode</button>
+    </div>
+  </header>
+
+  <div class="forms">
+    <form id="buyForm">
+      <h2>Buy</h2>
+      <label>Price</label>
+      <input id="buyPrice" type="number" step="0.01" min="0" placeholder="0.00" required>
+      <label>Quantity</label>
+      <input id="buyQty" type="number" step="1" min="1" placeholder="0" required>
+      <button type="submit">Place Buy</button>
+    </form>
+
+    <form id="sellForm">
+      <h2>Sell</h2>
+      <label>Price</label>
+      <input id="sellPrice" type="number" step="0.01" min="0" placeholder="0.00" required>
+      <label>Quantity</label>
+      <input id="sellQty" type="number" step="1" min="1" placeholder="0" required>
+      <button type="submit">Place Sell</button>
+    </form>
+  </div>
+
+  <div class="book">
+    <div class="side">
+      <h2>Bids (Buy)</h2>
+      <table>
+        <thead><tr><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+        <tbody id="bidsBody"></tbody>
+      </table>
+    </div>
+    <div class="side">
+      <h2>Asks (Sell)</h2>
+      <table>
+        <thead><tr><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+        <tbody id="asksBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="spread" id="spread"></div>
+
+<script>
+  // bids and asks are maps of price -> quantity (aggregated by price level)
+  const bids = new Map();
+  const asks = new Map();
+
+  function addOrder(book, price, qty) {
+    book.set(price, (book.get(price) || 0) + qty);
+  }
+
+  // Match an incoming order against the opposite side.
+  // side = "buy" matches against asks (lowest price first).
+  // side = "sell" matches against bids (highest price first).
+  function placeOrder(side, price, qty) {
+    const opposite = side === "buy" ? asks : bids;
+    const same = side === "buy" ? bids : asks;
+
+    let remaining = qty;
+    // Sort opposite price levels best-first for the taker.
+    const levels = [...opposite.keys()].sort((a, b) =>
+      side === "buy" ? a - b : b - a
+    );
+
+    for (const lvl of levels) {
+      if (remaining <= 0) break;
+      const crosses = side === "buy" ? lvl <= price : lvl >= price;
+      if (!crosses) break;
+
+      const available = opposite.get(lvl);
+      const fill = Math.min(available, remaining);
+      remaining -= fill;
+      if (fill >= available) {
+        opposite.delete(lvl);
+      } else {
+        opposite.set(lvl, available - fill);
+      }
+    }
+
+    // Any unfilled quantity rests on the book.
+    if (remaining > 0) addOrder(same, price, remaining);
+    render();
+  }
+
+  function renderSide(body, book, bestFirst) {
+    const rows = [...book.entries()].sort((a, b) =>
+      bestFirst ? b[0] - a[0] : a[0] - b[0]
+    );
+    if (rows.length === 0) {
+      body.innerHTML = '<tr><td class="empty" colspan="3">No orders</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(([price, qty]) =>
+      `<tr><td>${price.toFixed(2)}</td><td>${qty}</td><td>${(price * qty).toFixed(2)}</td></tr>`
+    ).join("");
+  }
+
+  function render() {
+    renderSide(bidsBody, bids, true);   // bids: highest price on top
+    renderSide(asksBody, asks, false);  // asks: lowest price on top
+    updateSpread();
+  }
+
+  function updateSpread() {
+    const bestBid = bids.size ? Math.max(...bids.keys()) : null;
+    const bestAsk = asks.size ? Math.min(...asks.keys()) : null;
+    const el = document.getElementById("spread");
+    if (bestBid !== null && bestAsk !== null) {
+      el.textContent = `Best Bid ${bestBid.toFixed(2)}  /  Best Ask ${bestAsk.toFixed(2)}  /  Spread ${(bestAsk - bestBid).toFixed(2)}`;
+    } else {
+      el.textContent = "No spread yet";
+    }
+  }
+
+  function readForm(priceId, qtyId) {
+    const price = parseFloat(document.getElementById(priceId).value);
+    const qty = parseInt(document.getElementById(qtyId).value, 10);
+    if (!(price > 0) || !(qty > 0)) return null;
+    return { price, qty };
+  }
+
+  document.getElementById("buyForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const o = readForm("buyPrice", "buyQty");
+    if (o) { placeOrder("buy", o.price, o.qty); e.target.reset(); }
+  });
+
+  document.getElementById("sellForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const o = readForm("sellPrice", "sellQty");
+    if (o) { placeOrder("sell", o.price, o.qty); e.target.reset(); }
+  });
+
+  // Dark mode toggle
+  const themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", () => {
+    const dark = document.body.getAttribute("data-theme") === "dark";
+    document.body.setAttribute("data-theme", dark ? "light" : "dark");
+    themeBtn.textContent = dark ? "Dark Mode" : "Light Mode";
+  });
+
+  render();
+</script>
+</body>
+</html>

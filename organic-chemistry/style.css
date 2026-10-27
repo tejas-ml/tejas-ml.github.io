@@ -1,0 +1,198 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f6f3ea;
+  --bg-alt: #ece7d9;
+  --ink: #1c1b18;
+  --ink-soft: #4a463f;
+  --line: #1c1b18;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+header {
+  border-bottom: 2px solid var(--line);
+  padding: 2rem 1rem 1rem;
+  text-align: center;
+  background: var(--bg-alt);
+}
+
+header h1 {
+  margin: 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  margin: 0.3rem 0 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+}
+
+nav a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  font-size: 0.95rem;
+}
+
+nav a:hover {
+  border-bottom: 1px solid var(--ink);
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+section {
+  margin-bottom: 3.5rem;
+}
+
+h2 {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.3rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+th {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+tr:nth-child(even) {
+  background: var(--bg-alt);
+}
+
+select, input[type="text"] {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  padding: 0.4rem;
+  font-family: inherit;
+  margin-right: 0.5rem;
+}
+
+button {
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid var(--ink);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  margin-right: 0.5rem;
+}
+
+button:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+#quiz-feedback {
+  font-weight: bold;
+  min-height: 1.5rem;
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* --- molecule viewer / builder --- */
+
+.builder-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.builder-controls label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.viewer-stage {
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 700px;
+  overflow: hidden;
+}
+
+.viewer-molecule {
+  width: 220px;
+  height: 220px;
+  animation: spin 9s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.viewer-molecule svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes spin {
+  from { transform: rotateY(0deg) rotateX(8deg); }
+  to   { transform: rotateY(360deg) rotateX(8deg); }
+}
+
+.viewer-name {
+  text-align: center;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-top: 0.5rem;
+}
+
+.atom-label {
+  font-size: 14px;
+  font-family: Georgia, serif;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.bond-line {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}

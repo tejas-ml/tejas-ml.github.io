@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grid Visualizer with Target Mode</title>
+  <style>
+    :root {
+      --bg: #1e1e2f;
+      --text: #f0f0f0;
+      --cell: #333;
+      --hover: #555;
+      --visited: #4CAF50;
+      --queued: #88d498;
+      --start: #2196F3;
+      --end: #e91e63;
+      --wall: #000;
+      --grid-line: #444;
+      --path: gold;
+    }
+
+    body.light {
+      --bg: #f2f2f2;
+      --text: #222;
+      --cell: #ffffff;
+      --hover: #ddd;
+      --visited: #66bb6a;
+      --queued: #a5d6a7;
+      --start: #1976D2;
+      --end: #e91e63;
+      --wall: #555;
+      --grid-line: #999;
+      --path: orange;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    .controls {
+      margin: 20px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    select, button, label {
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--cell);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 150px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(50, 14px);
+      grid-template-rows: repeat(50, 14px);
+      border: 2px solid var(--grid-line);
+    }
+
+    .cell {
+      width: 14px;
+      height: 14px;
+      background-color: var(--cell);
+      border: 1px solid var(--grid-line);
+    }
+
+    .visited {
+      background-color: var(--visited) !important;
+    }
+
+    .queued {
+      background-color: var(--queued) !important;
+    }
+
+    .start {
+      background-color: var(--start) !important;
+    }
+
+    .end {
+      background-color: var(--end) !important;
+    }
+
+    .wall {
+      background-color: var(--wall) !important;
+    }
+
+    .path {
+      background-color: var(--path) !important;
+    }
+
+    .warning {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="light">
+  <h1>Grid Visualizer with Target Mode 🎯</h1>
+  <div class="controls">
+    <label for="mode">Mode:</label>
+    <select id="mode">
+      <option value="dfs">DFS</option>
+      <option value="bfs">BFS</option>
+      <option value="astar">A*</option>
+    </select>
+    <button id="wallToggle">Wall Mode: OFF</button>
+    <button id="targetToggle">Target Mode: OFF</button>
+    <label>Speed: <input type="range" id="speedSlider" min="1" max="100" value="20"/></label>
+    <button id="resetBtn">Reset</button>
+    <button id="themeToggle">Toggle Theme</button>
+  </div>
+  <div id="warning" class="warning"></div>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const numRows = 50, numCols = 50;
+    const gridElement = document.getElementById('grid');
+    const wallToggle = document.getElementById('wallToggle');
+    const targetToggle = document.getElementById('targetToggle');
+    const speedSlider = document.getElementById('speedSlider');
+    const resetBtn = document.getElementById('resetBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const modeSelector = document.getElementById('mode');
+    const warning = document.getElementById('warning');
+
+    let wallMode = false;
+    let targetMode = false;
+    let selectingTarget = false;
+    let visited, walls, allCells, timers = [];
+    let startPoint = null;
+    let targetPoint = null;
+
+    function createGrid() {
+      gridElement.innerHTML = '';
+      visited = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+      walls = Array.from({ length: numRows }, () => Array(numCols).fill(false));
+      allCells = [];
+
+      for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.dataset.row = row;
+          cell.dataset.col = col;
+          cell.addEventListener('click', () => handleClick(row, col, cell));
+          gridElement.appendChild(cell);
+          allCells.push(cell);
+        }
+      }
+
+      startPoint = null;
+      targetPoint = null;
+      selectingTarget = false;
+      warning.innerText = '';
+    }
+
+    function handleClick(r, c, cell) {
+      if (wallMode) {
+        walls[r][c] = !walls[r][c];
+        cell.classList.toggle('wall', walls[r][c]);
+        return;
+      }
+
+      if (targetMode && !startPoint) {
+        startPoint = [r, c];
+        cell.classList.add('start');
+        selectingTarget = true;
+        warning.innerText = 'Now select a target cell.';
+        return;
+      }
+
+      if (targetMode && selectingTarget) {
+        targetPoint = [r, c];
+        cell.classList.add('end');
+        selectingTarget = false;
+        warning.innerText = '';
+        runSearch(startPoint, targetPoint);
+        return;
+      }
+
+      if (!targetMode) {
+        cell.classList.add('start');
+        runSearch([r, c], null);
+      }
+    }
+
+    function getNeighbors(r, c) {
+      const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
+      return dirs.map(([dr, dc]) => [r+dr, c+dc])
+        .filter(([nr, nc]) => nr >= 0 && nr < numRows && nc >= 0 && nc < numCols && !visited[nr][nc] && !walls[nr][nc]);
+    }
+
+    function runSearch(start, end) {
+      const mode = modeSelector.value;
+      if (targetMode && !end) {
+        warning.innerText = '⚠️ Please select a target cell.';
+        return;
+      }
+      warning.innerText = '';
+      if (mode === 'dfs') runDFS(start, end);
+      else if (mode === 'bfs') runBFS(start, end);
+      else if (mode === 'astar') runAStar(start, end);
+    }
+
+    function runDFS(start, end) {
+      const stack = [start];
+      const parent = {};
+      const delay = 101 - speedSlider.value;
+
+      function step() {
+        if (!stack.length) return;
+
+        const [r, c] = stack.pop();
+        if (visited[r][c]) return step();
+        visited[r][c] = true;
+
+        const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if (!cell.classList.contains('start') && !cell.classList.contains('end')) cell.classList.add('visited');
+
+        if (targetMode && end && r === end[0] && c === end[1]) {
+          highlightPath(parent, end);
+          return;
+        }
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          if (!parent[`${nr},${nc}`]) parent[`${nr},${nc}`] = [r, c];
+          stack.push([nr, nc]);
+        }
+
+        timers.push(setTimeout(step, delay));
+      }
+
+      step();
+    }
+
+    function runBFS(start, end) {
+      const queue = [start];
+      const parent = {};
+      const delay = 101 - speedSlider.value;
+
+      function step() {
+        if (!queue.length) return;
+
+        const [r, c] = queue.shift();
+        if (visited[r][c]) return step();
+        visited[r][c] = true;
+
+        const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if (!cell.classList.contains('start') && !cell.classList.contains('end')) cell.classList.add('visited');
+
+        if (targetMode && end && r === end[0] && c === end[1]) {
+          highlightPath(parent, end);
+          return;
+        }
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          if (!parent[`${nr},${nc}`]) {
+            parent[`${nr},${nc}`] = [r, c];
+            queue.push([nr, nc]);
+            document.querySelector(`.cell[data-row="${nr}"][data-col="${nc}"]`).classList.add('queued');
+          }
+        }
+
+        timers.push(setTimeout(step, delay));
+      }
+
+      step();
+    }
+
+    function runAStar(start, end) {
+      const delay = 101 - speedSlider.value;
+      const [sr, sc] = start, [er, ec] = end;
+
+      function heuristic(a, b) {
+        return Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]);
+      }
+
+      const open = [start];
+      const cameFrom = {};
+      const gScore = Array.from({ length: numRows }, () => Array(numCols).fill(Infinity));
+      gScore[sr][sc] = 0;
+
+      const fScore = Array.from({ length: numRows }, () => Array(numCols).fill(Infinity));
+      fScore[sr][sc] = heuristic(start, end);
+
+      function step() {
+        if (!open.length) return;
+
+        open.sort((a, b) => fScore[a[0]][a[1]] - fScore[b[0]][b[1]]);
+        const [r, c] = open.shift();
+        if (visited[r][c]) return step();
+        visited[r][c] = true;
+
+        const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if (!cell.classList.contains('start') && !cell.classList.contains('end')) cell.classList.add('visited');
+
+        if (r === er && c === ec) {
+          highlightPath(cameFrom, [r, c]);
+          return;
+        }
+
+        for (const [nr, nc] of getNeighbors(r, c)) {
+          const tentativeG = gScore[r][c] + 1;
+          if (tentativeG < gScore[nr][nc]) {
+            cameFrom[`${nr},${nc}`] = [r, c];
+            gScore[nr][nc] = tentativeG;
+            fScore[nr][nc] = tentativeG + heuristic([nr, nc], end);
+            if (!open.some(p => p[0] === nr && p[1] === nc)) {
+              open.push([nr, nc]);
+              document.querySelector(`.cell[data-row="${nr}"][data-col="${nc}"]`).classList.add('queued');
+            }
+          }
+        }
+
+        timers.push(setTimeout(step, delay));
+      }
+
+      step();
+    }
+
+    function highlightPath(parents, end) {
+      let current = end;
+      while (parents[`${current[0]},${current[1]}`]) {
+        current = parents[`${current[0]},${current[1]}`];
+        const cell = document.querySelector(`.cell[data-row="${current[0]}"][data-col="${current[1]}"]`);
+        if (!cell.classList.contains('start')) cell.classList.add('path');
+      }
+    }
+
+    wallToggle.addEventListener('click', () => {
+      wallMode = !wallMode;
+      wallToggle.textContent = `Wall Mode: ${wallMode ? 'ON' : 'OFF'}`;
+    });
+
+    targetToggle.addEventListener('click', () => {
+      targetMode = !targetMode;
+      targetToggle.textContent = `Target Mode: ${targetMode ? 'ON' : 'OFF'}`;
+      warning.innerText = '';
+    });
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+    });
+
+    resetBtn.addEventListener('click', () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      createGrid();
+    });
+
+    createGrid();
+  </script>
+</body>
+</html>

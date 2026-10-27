@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Northstar — How long until you can buy it</title>
+    <meta
+      name="description"
+      content="Name an item and the price you already know. Say how much you’ll invest each month and the return you expect. Northstar tells you how long until you can buy it."
+    />
+    <meta name="theme-color" content="#F3EFE6" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,560;9..144,640&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <svg class="grain" aria-hidden="true">
+      <filter id="noise">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise)" />
+    </svg>
+
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Northstar home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="10.25" stroke="currentColor" stroke-width="1.6" />
+            <circle cx="16" cy="16" r="1.6" fill="#C2613D" />
+            <path d="M16 7.2V16L22.2 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span>
+          <span class="brand-name">Northstar</span>
+          <span class="brand-sub">Time to buy</span>
+        </span>
+      </a>
+      <nav class="header-actions">
+        <button type="button" class="text-btn" id="reset-demo">Reset demo</button>
+        <button type="button" class="text-btn" id="scroll-numbers">Your plan</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">A wait you can actually use</p>
+        <h1>Name the thing. We’ll name the wait.</h1>
+        <p class="lede" id="plan-summary">
+          Put the item and the price you already know. Say how much you’ll invest each month and
+          the annual return you expect from stocks — or cash, or a mix. Northstar compounds that
+          path and tells you how long until you can buy it.
+        </p>
+      </section>
+
+      <div class="layout">
+        <aside class="panel numbers-panel" id="numbers">
+          <div class="panel-head">
+            <h2>Your plan</h2>
+            <p>Savings, a monthly amount, and a rate. Nothing leaves this browser.</p>
+          </div>
+
+          <label class="field">
+            <span>Current savings</span>
+            <span class="field-input">
+              <span class="prefix">$</span>
+              <input id="savings" type="number" min="0" step="100" inputmode="decimal" />
+            </span>
+          </label>
+
+          <label class="field">
+            <span>I’ll invest each month</span>
+            <span class="field-input">
+              <span class="prefix">$</span>
+              <input id="monthly" type="number" min="0" step="25" inputmode="decimal" />
+              <span class="suffix">/mo</span>
+            </span>
+          </label>
+
+          <fieldset class="field">
+            <legend>Where it’s invested</legend>
+            <div class="segmented" role="radiogroup" aria-label="Where it’s invested">
+              <button type="button" class="seg" data-mix="cash">Cash</button>
+              <button type="button" class="seg" data-mix="mix">Mix</button>
+              <button type="button" class="seg" data-mix="stocks">Stocks</button>
+            </div>
+          </fieldset>
+
+          <label class="field">
+            <span>Expected annual return <em id="return-label">8%</em></span>
+            <input id="return" type="range" min="0" max="15" step="0.5" />
+          </label>
+
+          <label class="field">
+            <span>Price inflation while you wait <em id="inflation-label">0%</em></span>
+            <input id="inflation" type="range" min="0" max="6" step="0.25" />
+          </label>
+
+          <p class="footnote">
+            The price you type is the price. Leave inflation at 0 if it’s locked in. Nudge it up
+            if housing or tuition may rise while you save. Returns compound monthly.
+          </p>
+        </aside>
+
+        <div class="main-col">
+          <section class="metrics" aria-label="Time to buy">
+            <article class="metric-card">
+              <p class="metric-kicker">Ready in</p>
+              <p class="metric-value" id="metric-wait">—</p>
+              <p class="metric-note" id="metric-wait-note">How long until the pile covers the price</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-kicker">You can buy it</p>
+              <p class="metric-value" id="metric-date">—</p>
+              <p class="metric-note" id="metric-date-note">Calendar month the path reaches the price</p>
+            </article>
+            <article class="metric-card">
+              <p class="metric-kicker">From returns</p>
+              <p class="metric-value" id="metric-growth">$0</p>
+              <p class="metric-note" id="metric-growth-note">What compounding adds on top of what you put in</p>
+            </article>
+          </section>
+
+          <section class="plan-controls panel">
+            <div class="panel-head tight">
+              <h2>Monthly investment</h2>
+              <p id="contrib-caption">Drag to see how the wait shrinks if you put more in each month.</p>
+            </div>
+            <div class="contrib-row">
+              <input id="contrib" type="range" min="0" max="8000" step="25" />
+              <strong id="contrib-value">$0</strong>
+            </div>
+            <p class="hint" id="gap-hint"></p>
+          </section>
+
+          <section class="goals-section">
+            <div class="section-head">
+              <div>
+                <h2>What you’re buying</h2>
+                <p>Each wait assumes this item is what the monthly investment is for.</p>
+              </div>
+              <button type="button" class="primary-btn" id="add-goal">Add an item</button>
+            </div>
+            <div class="goal-grid" id="goal-grid"></div>
+          </section>
+
+          <section class="charts-grid">
+            <article class="panel chart-panel">
+              <div class="panel-head tight">
+                <h2>The pile vs the price</h2>
+                <p id="chart-caption">Your invested balance growing toward a fixed price.</p>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="nw-chart" aria-label="Savings growing toward the item price"></canvas>
+              </div>
+            </article>
+            <article class="panel chart-panel">
+              <div class="panel-head tight">
+                <h2>Where the pile comes from</h2>
+                <p>What you already have, what you’ll add, and what the market adds.</p>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="hist-chart" aria-label="Breakdown of savings, contributions, and returns"></canvas>
+              </div>
+            </article>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head tight">
+              <h2>When each item is in reach</h2>
+              <p>Independent waits — one item at a time, same monthly amount.</p>
+            </div>
+            <div class="timeline" id="timeline"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head tight">
+              <h2>The math, item by item</h2>
+              <p>Fixed price, then the wait, then who put in what.</p>
+            </div>
+            <div class="table-wrap">
+              <table class="alloc-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Wait</th>
+                    <th>Ready</th>
+                    <th>You put in</th>
+                    <th>Returns</th>
+                  </tr>
+                </thead>
+                <tbody id="alloc-body"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Northstar is a planning sketch, not financial, tax, or investment advice. Markets can lose
+        money. Prices move. Run the numbers, then talk to a human you trust.
+      </p>
+    </footer>
+
+    <dialog id="goal-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" id="goal-form">
+        <div class="dialog-head">
+          <h2 id="dialog-title">Add an item</h2>
+          <button type="button" class="icon-btn" id="close-dialog" aria-label="Close">×</button>
+        </div>
+
+        <p class="dialog-label">What are you saving for?</p>
+        <div class="type-grid" id="type-grid"></div>
+
+        <label class="field">
+          <span>Name</span>
+          <input id="goal-name" type="text" maxlength="48" required placeholder="Used car, wedding, laptop…" />
+        </label>
+
+        <label class="field">
+          <span>Price you know</span>
+          <span class="field-input">
+            <span class="prefix">$</span>
+            <input id="goal-amount" type="number" min="1" step="1" required />
+          </span>
+        </label>
+        <p class="footnote dialog-note">
+          Type the sticker price — we won’t invent a date or mark it up unless you set inflation.
+        </p>
+
+        <input type="hidden" id="goal-id" />
+        <input type="hidden" id="goal-type" />
+
+        <div class="dialog-actions">
+          <button type="button" class="text-btn danger" id="delete-goal" hidden>Delete</button>
+          <span class="grow"></span>
+          <button type="button" class="text-btn" id="cancel-goal">Cancel</button>
+          <button type="submit" class="primary-btn" id="save-goal">Save item</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

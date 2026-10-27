@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organic Nomenclature</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Organic Nomenclature</h1>
+  <p class="subtitle">Learn how organic molecules get their names</p>
+</header>
+
+<nav>
+  <a href="#basics">Basics</a>
+  <a href="#prefixes">Prefixes</a>
+  <a href="#substituents">Substituents</a>
+  <a href="#suffixes">Suffixes</a>
+  <a href="#table">Alkanes</a>
+  <a href="#biomolecules">Biomolecules</a>
+  <a href="#viewer">Viewer</a>
+  <a href="#builder">Builder</a>
+  <a href="#quiz">Quiz</a>
+</nav>
+
+<main>
+
+  <section id="basics">
+    <h2>The Basics</h2>
+    <p>
+      Organic chemistry names follow IUPAC (International Union of Pure and Applied Chemistry) rules.
+      Most names are built from up to four parts:
+    </p>
+    <ol>
+      <li><strong>Locants / substituent prefixes</strong> — numbers and names of branches or attached groups (e.g. <em>2-methyl-</em>, <em>3-chloro-</em>).</li>
+      <li><strong>Root prefix</strong> — how many carbon atoms are in the main chain (e.g. <em>meth-</em>, <em>eth-</em>, <em>prop-</em>).</li>
+      <li><strong>Infix</strong> — position of unsaturation or ring (e.g. <em>but-2-en-</em>).</li>
+      <li><strong>Suffix</strong> — the principal functional group (e.g. <em>-ane</em>, <em>-ol</em>, <em>-oic acid</em>).</li>
+    </ol>
+    <p>
+      Example: <strong>3-methylbut-1-ene</strong> = <em>3-methyl</em> (branch on carbon 3) + <em>but</em> (4 carbons) + <em>1-ene</em> (double bond starting at carbon 1).
+    </p>
+  </section>
+
+  <section id="prefixes">
+    <h2>Carbon-Count Prefixes</h2>
+    <p>These prefixes tell you how many carbons are in the main chain, regardless of functional group.</p>
+    <table>
+      <thead><tr><th>Carbons</th><th>Prefix</th><th>Example (alkane)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>meth-</td><td>methane</td></tr>
+        <tr><td>2</td><td>eth-</td><td>ethane</td></tr>
+        <tr><td>3</td><td>prop-</td><td>propane</td></tr>
+        <tr><td>4</td><td>but-</td><td>butane</td></tr>
+        <tr><td>5</td><td>pent-</td><td>pentane</td></tr>
+        <tr><td>6</td><td>hex-</td><td>hexane</td></tr>
+        <tr><td>7</td><td>hept-</td><td>heptane</td></tr>
+        <tr><td>8</td><td>oct-</td><td>octane</td></tr>
+        <tr><td>9</td><td>non-</td><td>nonane</td></tr>
+        <tr><td>10</td><td>dec-</td><td>decane</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="substituents">
+    <h2>Substituent (-yl) Groups</h2>
+    <p>When a carbon chain branches off the main chain, it becomes a substituent named with <strong>-yl</strong> instead of <strong>-ane</strong>.</p>
+    <table>
+      <thead><tr><th>Group</th><th>Formula</th><th>From</th></tr></thead>
+      <tbody>
+        <tr><td>methyl</td><td>–CH<sub>3</sub></td><td>methane</td></tr>
+        <tr><td>ethyl</td><td>–CH<sub>2</sub>CH<sub>3</sub></td><td>ethane</td></tr>
+        <tr><td>propyl</td><td>–CH<sub>2</sub>CH<sub>2</sub>CH<sub>3</sub></td><td>propane</td></tr>
+        <tr><td>isopropyl</td><td>–CH(CH<sub>3</sub>)<sub>2</sub></td><td>propane (branched)</td></tr>
+        <tr><td>butyl</td><td>–CH<sub>2</sub>CH<sub>2</sub>CH<sub>2</sub>CH<sub>3</sub></td><td>butane</td></tr>
+        <tr><td>tert-butyl</td><td>–C(CH<sub>3</sub>)<sub>3</sub></td><td>butane (branched)</td></tr>
+        <tr><td>vinyl (ethenyl)</td><td>–CH=CH<sub>2</sub></td><td>ethene</td></tr>
+        <tr><td>phenyl</td><td>–C<sub>6</sub>H<sub>5</sub></td><td>benzene</td></tr>
+      </tbody>
+    </table>
+    <p>Example: <strong>2-methylpropane</strong> has a methyl branch on carbon 2 of a propane chain.</p>
+  </section>
+
+  <section id="suffixes">
+    <h2>Suffixes &amp; Functional Groups</h2>
+    <table>
+      <thead><tr><th>Suffix / Prefix</th><th>Functional Group</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>-ane</td><td>all single bonds (saturated)</td><td>propane</td></tr>
+        <tr><td>-ene</td><td>C=C double bond</td><td>but-2-ene</td></tr>
+        <tr><td>-yne</td><td>C≡C triple bond</td><td>but-1-yne</td></tr>
+        <tr><td>-ol</td><td>alcohol, –OH</td><td>propan-1-ol</td></tr>
+        <tr><td>-al</td><td>aldehyde, –CHO</td><td>propanal</td></tr>
+        <tr><td>-one</td><td>ketone, C=O mid-chain</td><td>propan-2-one (acetone)</td></tr>
+        <tr><td>-oic acid</td><td>carboxylic acid, –COOH</td><td>propanoic acid</td></tr>
+        <tr><td>-oate</td><td>ester, –COO–</td><td>methyl propanoate</td></tr>
+        <tr><td>-amine</td><td>amine, –NH<sub>2</sub></td><td>propan-1-amine</td></tr>
+        <tr><td>-amide</td><td>amide, –CONH<sub>2</sub></td><td>propanamide</td></tr>
+        <tr><td>-nitrile</td><td>nitrile, –C≡N</td><td>propanenitrile</td></tr>
+        <tr><td>fluoro-</td><td>–F substituent</td><td>1-fluoropropane</td></tr>
+        <tr><td>chloro-</td><td>–Cl substituent</td><td>1-chloropropane</td></tr>
+        <tr><td>bromo-</td><td>–Br substituent</td><td>1-bromopropane</td></tr>
+        <tr><td>iodo-</td><td>–I substituent</td><td>1-iodopropane</td></tr>
+        <tr><td>alkoxy- (e.g. methoxy-)</td><td>ether, –O–R</td><td>1-methoxypropane</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Numbers (locants) show where the feature sits on the chain — counted to give the
+      <strong>lowest possible number</strong> to the principal group. <em>but-1-ene</em> and
+      <em>but-2-ene</em> are different molecules: the double bond starts at carbon 1 or carbon 2.
+    </p>
+  </section>
+
+  <section id="table">
+    <h2>Straight-Chain Alkanes (C<sub>n</sub>H<sub>2n+2</sub>)</h2>
+    <table>
+      <thead><tr><th>Name</th><th>Formula</th><th>Carbons</th></tr></thead>
+      <tbody id="alkane-table-body"></tbody>
+    </table>
+  </section>
+
+  <section id="biomolecules">
+    <h2>Biological Molecules</h2>
+    <p>Many molecules central to biology follow the same naming logic, though common names are often used instead.</p>
+    <table>
+      <thead><tr><th>Molecule</th><th>Category</th><th>Formula</th><th>Note</th></tr></thead>
+      <tbody id="bio-table-body"></tbody>
+    </table>
+  </section>
+
+  <section id="viewer">
+    <h2>Molecule Viewer</h2>
+    <p>Pick a molecule to see an animated skeletal diagram.</p>
+    <select id="viewer-select"></select>
+    <div id="viewer-stage" class="viewer-stage">
+      <div id="viewer-molecule" class="viewer-molecule"></div>
+    </div>
+    <p id="viewer-name" class="viewer-name"></p>
+  </section>
+
+  <section id="builder">
+    <h2>Molecule Builder</h2>
+    <p>Build a simple chain and see its name and structure update live.</p>
+
+    <div class="builder-controls">
+      <label>Chain length
+        <select id="b-length"></select>
+      </label>
+
+      <label>Bond type
+        <select id="b-bond">
+          <option value="ane">single (-ane)</option>
+          <option value="ene">double (-ene)</option>
+          <option value="yne">triple (-yne)</option>
+        </select>
+      </label>
+
+      <label>Bond position
+        <select id="b-bond-pos"></select>
+      </label>
+
+      <label>Branch (methyl)
+        <select id="b-branch">
+          <option value="0">none</option>
+        </select>
+      </label>
+
+      <label>Functional group
+        <select id="b-func">
+          <option value="">none</option>
+          <option value="ol">alcohol (-ol)</option>
+          <option value="al">aldehyde (-al)</option>
+          <option value="one">ketone (-one)</option>
+          <option value="oic">carboxylic acid (-oic acid)</option>
+          <option value="amine">amine (-amine)</option>
+        </select>
+      </label>
+
+      <label>Group position
+        <select id="b-func-pos"></select>
+      </label>
+    </div>
+
+    <div id="builder-stage" class="viewer-stage">
+      <div id="builder-molecule" class="viewer-molecule"></div>
+    </div>
+    <p id="builder-name" class="viewer-name"></p>
+  </section>
+
+  <section id="quiz">
+    <h2>Quick Quiz</h2>
+    <p id="quiz-question">Loading…</p>
+    <input type="text" id="quiz-answer" placeholder="Type your answer">
+    <button id="quiz-submit">Check</button>
+    <button id="quiz-next">Next</button>
+    <p id="quiz-feedback"></p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Reference only — always confirm names with current IUPAC recommendations.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbitrage</title>
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --fg: #2b2b2b;
+    --muted: #7a766e;
+    --border: #cfc9bd;
+    --row: #ece9e1;
+    --hi: #2f7d4f;
+    --hi-bg: #d8ecdd;
+  }
+  [data-theme="dark"] {
+    --bg: #1c1f24;
+    --fg: #d6d3cc;
+    --muted: #8b8f96;
+    --border: #3a3f47;
+    --row: #23272e;
+    --hi: #6fcf97;
+    --hi-bg: #1e3a2b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Courier New", monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+
+  header {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .controls { display: flex; gap: 8px; align-items: center; }
+
+  a.nav {
+    font-family: inherit;
+    color: var(--fg);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  a.nav:hover { background: var(--fg); color: var(--bg); }
+
+  button {
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  button:hover { background: var(--fg); color: var(--bg); }
+
+  /* Arbitrage banner */
+  .arb {
+    width: 100%;
+    max-width: 980px;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .arb.active {
+    border-color: var(--hi);
+    background: var(--hi-bg);
+    color: var(--hi);
+  }
+  .arb .tag {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+  }
+  .arb.active .tag { color: var(--hi); }
+  .arb strong { font-size: 15px; }
+
+  .markets {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    gap: 24px;
+  }
+  .market { flex: 1; min-width: 0; }
+
+  .market > h2 {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .forms { display: flex; gap: 12px; margin-bottom: 16px; }
+
+  form {
+    flex: 1;
+    border: 1px solid var(--border);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  form h3 {
+    margin: 0 0 2px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  label { font-size: 11px; color: var(--muted); }
+
+  input {
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 5px;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .book { display: flex; gap: 12px; }
+
+  .side { flex: 1; border: 1px solid var(--border); }
+
+  .side h3 {
+    margin: 0;
+    padding: 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px 10px; text-align: right; }
+  th {
+    color: var(--muted);
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  tbody tr:nth-child(even) { background: var(--row); }
+  tbody tr.hi {
+    background: var(--hi-bg);
+    color: var(--hi);
+    font-weight: bold;
+  }
+
+  .empty { text-align: center; color: var(--muted); padding: 16px; }
+
+  .spread {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .markets { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Arbitrage</h1>
+    <div class="controls">
+      <a class="nav" href="index.html">Single Book</a>
+      <button id="themeBtn" type="button">Dark Mode</button>
+    </div>
+  </header>
+
+  <div class="arb" id="arb">
+    <span class="tag">Arbitrage Scanner</span>
+    <span id="arbText">No arbitrage opportunity</span>
+  </div>
+
+  <div class="markets" id="markets"></div>
+
+<script>
+  // A "marketplace" is an isolated orderbook with its own bids/asks.
+  // Each side aggregates resting quantity by price level (price -> qty).
+  function createMarket(id, name) {
+    return { id, name, bids: new Map(), asks: new Map() };
+  }
+
+  const markets = [
+    createMarket("A", "Marketplace A"),
+    createMarket("B", "Marketplace B"),
+  ];
+
+  function addOrder(book, price, qty) {
+    book.set(price, (book.get(price) || 0) + qty);
+  }
+
+  // Match an incoming order against the opposite side of its own market.
+  // side = "buy" matches against asks (lowest price first).
+  // side = "sell" matches against bids (highest price first).
+  function placeOrder(market, side, price, qty) {
+    const opposite = side === "buy" ? market.asks : market.bids;
+    const same = side === "buy" ? market.bids : market.asks;
+
+    let remaining = qty;
+    const levels = [...opposite.keys()].sort((a, b) =>
+      side === "buy" ? a - b : b - a
+    );
+
+    for (const lvl of levels) {
+      if (remaining <= 0) break;
+      const crosses = side === "buy" ? lvl <= price : lvl >= price;
+      if (!crosses) break;
+
+      const available = opposite.get(lvl);
+      const fill = Math.min(available, remaining);
+      remaining -= fill;
+      if (fill >= available) opposite.delete(lvl);
+      else opposite.set(lvl, available - fill);
+    }
+
+    if (remaining > 0) addOrder(same, price, remaining);
+    render();
+  }
+
+  function bestBid(m) { return m.bids.size ? Math.max(...m.bids.keys()) : null; }
+  function bestAsk(m) { return m.asks.size ? Math.min(...m.asks.keys()) : null; }
+
+  // ---- Rendering ------------------------------------------------------
+
+  // Build the DOM for one marketplace and wire up its forms.
+  function buildMarket(m) {
+    const wrap = document.createElement("div");
+    wrap.className = "market";
+    wrap.innerHTML = `
+      <h2>${m.name}</h2>
+      <div class="forms">
+        <form data-side="buy">
+          <h3>Buy</h3>
+          <label>Price</label>
+          <input class="price" type="number" step="0.01" min="0" placeholder="0.00" required>
+          <label>Quantity</label>
+          <input class="qty" type="number" step="1" min="1" placeholder="0" required>
+          <button type="submit">Place Buy</button>
+        </form>
+        <form data-side="sell">
+          <h3>Sell</h3>
+          <label>Price</label>
+          <input class="price" type="number" step="0.01" min="0" placeholder="0.00" required>
+          <label>Quantity</label>
+          <input class="qty" type="number" step="1" min="1" placeholder="0" required>
+          <button type="submit">Place Sell</button>
+        </form>
+      </div>
+      <div class="book">
+        <div class="side">
+          <h3>Bids (Buy)</h3>
+          <table>
+            <thead><tr><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+            <tbody class="bids"></tbody>
+          </table>
+        </div>
+        <div class="side">
+          <h3>Asks (Sell)</h3>
+          <table>
+            <thead><tr><th>Price</th><th>Qty</th><th>Total</th></tr></thead>
+            <tbody class="asks"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="spread"></div>
+    `;
+
+    wrap.querySelectorAll("form").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const price = parseFloat(form.querySelector(".price").value);
+        const qty = parseInt(form.querySelector(".qty").value, 10);
+        if (!(price > 0) || !(qty > 0)) return;
+        placeOrder(m, form.dataset.side, price, qty);
+        form.reset();
+      });
+    });
+
+    m.el = {
+      bids: wrap.querySelector(".bids"),
+      asks: wrap.querySelector(".asks"),
+      spread: wrap.querySelector(".spread"),
+    };
+    return wrap;
+  }
+
+  // Render one side. `hiPrice` is the price level to highlight (or null).
+  function renderSide(body, book, bestFirst, hiPrice) {
+    const rows = [...book.entries()].sort((a, b) =>
+      bestFirst ? b[0] - a[0] : a[0] - b[0]
+    );
+    if (rows.length === 0) {
+      body.innerHTML = '<tr><td class="empty" colspan="3">No orders</td></tr>';
+      return;
+    }
+    body.innerHTML = rows.map(([price, qty]) => {
+      const hi = hiPrice !== null && price === hiPrice ? ' class="hi"' : "";
+      return `<tr${hi}><td>${price.toFixed(2)}</td><td>${qty}</td><td>${(price * qty).toFixed(2)}</td></tr>`;
+    }).join("");
+  }
+
+  // Find the most profitable cross-market arbitrage, if any.
+  // Buy on the market with the lower ask, sell on the market with the
+  // higher bid. Profit per unit = (other bid) - (this ask), > 0 to exist.
+  function findArbitrage() {
+    let best = null;
+    for (const buyM of markets) {
+      for (const sellM of markets) {
+        if (buyM === sellM) continue;
+        const ask = bestAsk(buyM);   // price we buy at
+        const bid = bestBid(sellM);  // price we sell at
+        if (ask === null || bid === null) continue;
+        if (bid <= ask) continue;
+        const qty = Math.min(buyM.asks.get(ask), sellM.bids.get(bid));
+        const profit = (bid - ask) * qty;
+        if (!best || profit > best.profit) {
+          best = { buyM, sellM, ask, bid, qty, profit, perUnit: bid - ask };
+        }
+      }
+    }
+    return best;
+  }
+
+  function render() {
+    const arb = findArbitrage();
+
+    for (const m of markets) {
+      // Highlight the levels involved in the active arbitrage.
+      const hiAsk = arb && arb.buyM === m ? arb.ask : null;
+      const hiBid = arb && arb.sellM === m ? arb.bid : null;
+      renderSide(m.el.bids, m.bids, true, hiBid);
+      renderSide(m.el.asks, m.asks, false, hiAsk);
+
+      const bb = bestBid(m), ba = bestAsk(m);
+      m.el.spread.textContent =
+        bb !== null && ba !== null
+          ? `Best Bid ${bb.toFixed(2)}  /  Best Ask ${ba.toFixed(2)}  /  Spread ${(ba - bb).toFixed(2)}`
+          : "No spread yet";
+    }
+
+    const banner = document.getElementById("arb");
+    const text = document.getElementById("arbText");
+    if (arb) {
+      banner.classList.add("active");
+      text.innerHTML =
+        `<strong>Buy ${arb.qty} on ${arb.buyM.name} @ ${arb.ask.toFixed(2)} → ` +
+        `Sell on ${arb.sellM.name} @ ${arb.bid.toFixed(2)}</strong><br>` +
+        `Edge ${arb.perUnit.toFixed(2)}/unit · Risk-free profit ${arb.profit.toFixed(2)}`;
+    } else {
+      banner.classList.remove("active");
+      text.textContent = "No arbitrage opportunity";
+    }
+  }
+
+  // ---- Init -----------------------------------------------------------
+
+  const container = document.getElementById("markets");
+  markets.forEach((m) => container.appendChild(buildMarket(m)));
+
+  const themeBtn = document.getElementById("themeBtn");
+  themeBtn.addEventListener("click", () => {
+    const dark = document.body.getAttribute("data-theme") === "dark";
+    document.body.setAttribute("data-theme", dark ? "light" : "dark");
+    themeBtn.textContent = dark ? "Dark Mode" : "Light Mode";
+  });
+
+  render();
+</script>
+</body>
+</html>

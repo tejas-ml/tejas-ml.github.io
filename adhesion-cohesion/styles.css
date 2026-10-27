@@ -1,0 +1,657 @@
+/* ==========================================================================
+   DESIGN SYSTEM & CUSTOM PROPERTIES
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors */
+  --bg-primary: #040914;
+  --bg-secondary: #0a1424;
+  --bg-card: rgba(13, 27, 42, 0.45);
+  --bg-card-hover: rgba(16, 37, 66, 0.6);
+  --border-color: rgba(0, 245, 212, 0.15);
+  --border-color-hover: rgba(0, 245, 212, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  
+  /* Accent Colors (Water Theme) */
+  --accent-cyan: #00f5d4;
+  --accent-blue: #00bbf9;
+  --accent-purple: #7b2cbf;
+  --accent-mercury: #e2e8f0;
+  --accent-danger: #ff477e;
+  --accent-success: #38b000;
+  
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, var(--bg-primary) 0%, #0d1b2a 100%);
+  --grad-water: linear-gradient(180deg, rgba(0, 245, 212, 0.8) 0%, rgba(0, 187, 249, 0.9) 100%);
+  --grad-mercury: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+  --grad-accent: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  
+  /* Shadows & Effects */
+  --glow-cyan: 0 0 15px rgba(0, 245, 212, 0.4);
+  --glow-blue: 0 0 15px rgba(0, 187, 249, 0.4);
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-blur: blur(12px);
+  
+  /* Layout */
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-primary);
+  background-image: var(--grad-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 212, 0.3);
+}
+
+/* ==========================================================================
+   LAYOUT STRUCTURE
+   ========================================================================== */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 30%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  text-transform: tracking-tight;
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.badge {
+  background: rgba(0, 245, 212, 0.1);
+  border: 1px solid var(--border-color);
+  color: var(--accent-cyan);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   GLASSMOPHISM CARDS
+   ========================================================================== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+  border-color: var(--border-color-hover);
+  background: var(--bg-card-hover);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+.glass-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+
+.glass-card h2 svg {
+  color: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   SIMULATOR STYLING
+   ========================================================================== */
+.simulator-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.canvas-container {
+  position: relative;
+  background: #020617;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  box-shadow: inset 0 4px 30px rgba(0,0,0,0.8);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.preset-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-preset {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-preset:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-preset.active[data-preset="water"] {
+  background: rgba(0, 245, 212, 0.15);
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-preset.active[data-preset="mercury"] {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--accent-mercury);
+  border-color: var(--accent-mercury);
+  box-shadow: 0 0 15px rgba(148, 163, 184, 0.3);
+}
+
+.btn-preset.active[data-preset="custom"] {
+  background: rgba(0, 187, 249, 0.15);
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.slider-value {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* Custom Slider Styling */
+.range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #0d1b2a;
+  outline: none;
+  transition: var(--transition-smooth);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 245, 212, 0.8);
+  transition: var(--transition-smooth);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 1);
+}
+
+/* ==========================================================================
+   BIOLOGY 101 EXPLANATIONS SECTION
+   ========================================================================== */
+.tabs-header {
+  display: flex;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--accent-cyan);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.concept-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--border-radius-sm);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  transition: var(--transition-smooth);
+}
+
+.concept-card:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+}
+
+.concept-card h3 {
+  font-size: 1.25rem;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.biology-infotip {
+  background: rgba(0, 187, 249, 0.08);
+  border-left: 4px solid var(--accent-blue);
+  padding: 1rem;
+  border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.biology-infotip p strong {
+  color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   QUIZ COMPONENT
+   ========================================================================== */
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option-btn {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--border-radius-sm);
+  padding: 1rem;
+  text-align: left;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.15);
+}
+
+.option-btn.correct {
+  background: rgba(56, 176, 0, 0.15) !important;
+  border-color: var(--accent-success) !important;
+  color: #fff !important;
+}
+
+.option-btn.incorrect {
+  background: rgba(255, 71, 126, 0.15) !important;
+  border-color: var(--accent-danger) !important;
+  color: #fff !important;
+}
+
+.quiz-feedback {
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.95rem;
+  display: none;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.quiz-feedback.correct {
+  display: block;
+  background: rgba(56, 176, 0, 0.1);
+  border: 1px solid rgba(56, 176, 0, 0.3);
+  color: #a7f3d0;
+}
+
+.quiz-feedback.incorrect {
+  display: block;
+  background: rgba(255, 71, 126, 0.1);
+  border: 1px solid rgba(255, 71, 126, 0.3);
+  color: #fecdd3;
+}
+
+.quiz-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.btn-next {
+  background: var(--grad-accent);
+  border: none;
+  color: #040914;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--glow-blue);
+}
+
+.btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.6);
+}
+
+.btn-next:disabled {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.score-panel {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid var(--accent-cyan);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1.5rem auto;
+  box-shadow: var(--glow-cyan);
+}
+
+.score-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+}
+
+.score-total {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  width: 60%;
+  padding-top: 2px;
+}
+
+.btn-reset-quiz {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-sm);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-top: 1rem;
+}
+
+.btn-reset-quiz:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   MOLECULAR VIEW PANEL TOGGLE
+   ========================================================================== */
+.view-toggle-container {
+  display: flex;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--border-radius-sm);
+  padding: 0.25rem;
+}
+
+.btn-view-toggle {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-view-toggle.active {
+  background: rgba(0, 245, 212, 0.1);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 245, 212, 0.2);
+}
+
+.interactive-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 0.5rem;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.interactive-hint svg {
+  color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   GLOSSARY & DETAILS LIST
+   ========================================================================== */
+.bullet-list {
+  list-style: none;
+}
+
+.bullet-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.bullet-list li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+}
+
+.highlight {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.water-highlight {
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+footer {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+footer a:hover {
+  text-decoration: underline;
+  color: #fff;
+}

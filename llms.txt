@@ -1,0 +1,41 @@
+# Tejas Sandip Mahajan (Tejas Mahajan)
+
+> PhD Student in Computer Science at the University of Central Florida (UCF Computational Biology Lab) | Quantitative Researcher, AI/ML Scientist & Software Engineer.
+
+## Contact & Canonical Profiles
+- Website: https://tejas-ml.github.io/
+- Email: network.with.tejas@gmail.com
+- Location: Orlando, FL, USA
+- GitHub: https://github.com/tejas-ml
+- LinkedIn: https://www.linkedin.com/in/tejas-ml
+- Google Scholar: https://scholar.google.com/citations?user=sLSmk9AAAAAJ&hl=en
+- ResearchGate: https://www.researchgate.net/profile/tejas-Mahajan-5
+- X (Twitter): https://x.com/tejas-ml
+- LeetCode: https://leetcode.com/u/tejas-ml/
+- CodeChef: https://www.codechef.com/users/tejas_ml
+- Codeforces: https://codeforces.com/profile/tejas_ml
+- UCF Lab Page: https://www.cs.ucf.edu/compbio/people/
+
+## Education
+- **University of Central Florida (Orlando, FL)**: Ph.D. in Computer Science (2025 – 2030), Computational Biology Lab.
+- B.E. in Computer Science & Communications Engineering, Waseda University (2021 – 2025).
+
+## Publications & Research (2025–2026)
+- **ChronoGRN**: Delay-aware, enhancer-gated Neural ODEs for time-varying gene regulatory network inference from paired scRNA+scATAC trajectories (2026).
+- **FairDRAM**: QoS-Aware Memory Scheduling for CPU–AI Co-Execution (2026).
+- **SyntheticShield**: Auditing Memorization and Membership Leakage in Synthetic Data Generators (2026).
+- **ModelCardSec**: Automated Privacy and Security Risk Profiling for Machine Learning Models (2026).
+- **PromptLeakDetector**: Runtime Detection of System Prompt and Context Leakage in LLM Applications (2026).
+- **RAGGuard**: A Context-Aware Privacy Firewall for Retrieval-Augmented Generation (2026).
+- **Differential Expression Benchmark**: Comparative differential expression analysis: PyDESeq2 vs. InMoose edgeR for bulk RNA-seq in asthma airway smooth muscle (2025).
+
+## Key Software Projects
+- **Computational Biology & Clinical AI**: ChronoGRN, HelixMatch (clinical trial RAG matcher), AURA Clinical (sepsis/deterioration RPM predictor), Aegis (CMS claims fraud detector), Causal Dynamic GRN, Single-Cell Foundation Embedding Transfer, Multi-Omics Cancer Stratification.
+- **Quantitative Finance**: Tejas Trading (Kalshi-style prediction market), Rust → Quant (interactive Rust quant finance course), TradeSim (Black–Scholes options/equities simulator), Orderbook & Arbitrage Simulator, News Sentiment Stock Predictor, Stock Scraper, Portfolio Diversity Calculator, Northstar, FICO Credit Score Simulator, CardFind.
+- **AI Security & Systems**: SyntheticShield, RAGGuard, PromptLeakDetector, ModelCardSec, FairDRAM, 4-Bit Ripple-Carry Adder Visualizer, DFS/BFS/A* Pathfinding Simulator, Sorting Visualizer.
+
+## Site Pages
+- [Home](https://tejas-ml.github.io/index.html): Biography, education, highlights, and profile links.
+- [Research](https://tejas-ml.github.io/research.html): Publications and computational biology / AI security research.
+- [Projects](https://tejas-ml.github.io/projects.html): Interactive demos and open-source repositories across CompBio, Quant Finance, Clinical AI, and Security.
+- [CV](https://tejas-ml.github.io/cv.html): Curriculum Vitae, academic experience, and technical skills.

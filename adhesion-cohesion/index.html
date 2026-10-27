@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Properties: Adhesion & Cohesion Simulator | Biology 101</title>
+  <meta name="description" content="An interactive simulator demonstrating cohesion, adhesion, meniscus formation, and capillary action in water and other fluids. Perfect for Biology 101 students.">
+  <meta name="keywords" content="Biology 101, Cohesion, Adhesion, Water properties, Meniscus, Capillary action, Transpiration, Hydrogen bonding">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header>
+      <div class="badge">Biology 101 Learning Module</div>
+      <h1 id="main-title">Adhesion & Cohesion Simulator</h1>
+      <p id="main-subtitle">Explore how polar forces shape liquid behavior—from the curve of a graduated cylinder meniscus to how trees pull water hundreds of feet into the sky.</p>
+    </header>
+
+    <!-- MAIN GRID CONTAINER -->
+    <main class="main-grid">
+      
+      <!-- COLUMN 1: VISUAL SIMULATOR WORKSPACE -->
+      <section class="simulator-wrapper glass-card" aria-labelledby="sim-title">
+        <h2 id="sim-title">
+          <!-- Flask/Experiment SVG Icon -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Interactive Physics Lab
+        </h2>
+
+        <!-- Visual Mode Toggle -->
+        <div class="view-toggle-container">
+          <button id="btn-view-macro" class="btn-view-toggle active" aria-pressed="true">Macro: Meniscus & Capillary</button>
+          <button id="btn-view-micro" class="btn-view-toggle" aria-pressed="false">Micro: Molecular Bonds</button>
+        </div>
+
+        <!-- Simulation Canvas Container -->
+        <div class="canvas-container">
+          <canvas id="sim-canvas"></canvas>
+        </div>
+
+        <!-- Interactive Hint -->
+        <div class="interactive-hint" id="canvas-hint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Tip: Hover or drag inside the tube to perturb the fluid and watch gravity pull it back!</span>
+        </div>
+
+        <!-- Simulator Controls -->
+        <div class="controls-panel">
+          
+          <!-- Presets -->
+          <div class="slider-group">
+            <span class="slider-label">Fluid Presets</span>
+            <div class="preset-container">
+              <button id="preset-water" class="btn-preset active" data-preset="water">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                Water (Concave)
+              </button>
+              <button id="preset-mercury" class="btn-preset" data-preset="mercury">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4h8z"/></svg>
+                Mercury (Convex)
+              </button>
+              <button id="preset-custom" class="btn-preset" data-preset="custom">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/></svg>
+                Custom Sandbox
+              </button>
+            </div>
+          </div>
+
+          <!-- Slider: Cohesive Force -->
+          <div class="slider-group">
+            <div class="slider-label">
+              <span>Cohesive Force (Water ⟷ Water)</span>
+              <span id="label-cohesion" class="slider-value">60</span>
+            </div>
+            <input type="range" id="slider-cohesion" class="range-slider" min="0" max="100" value="60" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60">
+          </div>
+
+          <!-- Slider: Adhesive Force -->
+          <div class="slider-group">
+            <div class="slider-label">
+              <span>Adhesive Force (Water ⟷ Glass)</span>
+              <span id="label-adhesion" class="slider-value">85</span>
+            </div>
+            <input type="range" id="slider-adhesion" class="range-slider" min="0" max="100" value="85" aria-valuemin="0" aria-valuemax="100" aria-valuenow="85">
+          </div>
+
+          <!-- Slider: Tube Width -->
+          <div class="slider-group">
+            <div class="slider-label">
+              <span>Capillary Tube Width (Diameter)</span>
+              <span id="label-width" class="slider-value">80px</span>
+            </div>
+            <input type="range" id="slider-width" class="range-slider" min="40" max="160" value="80" aria-valuemin="40" aria-valuemax="160" aria-valuenow="80">
+          </div>
+
+        </div>
+      </section>
+
+      <!-- COLUMN 2: BIO 101 LEARNING CENTER & QUIZ -->
+      <section class="learning-wrapper glass-card" aria-labelledby="learning-title">
+        <h2 id="learning-title">
+          <!-- Graduate Cap Icon -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2.5 3 6 3s6-1 6-3v-5"/></svg>
+          Biology 101 Classroom
+        </h2>
+
+        <!-- Learning Tabs -->
+        <div class="tabs-header" role="tablist">
+          <button id="tab-concepts" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-concepts">Core Concepts</button>
+          <button id="tab-capillary" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-capillary">Biological Impact</button>
+          <button id="tab-quiz" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-quiz">Concept Quiz</button>
+        </div>
+
+        <!-- TAB 1 CONTENT: CORE CONCEPTS -->
+        <div id="panel-concepts" class="tab-content active" role="tabpanel" aria-labelledby="tab-concepts">
+          <div class="concept-card">
+            <h3>
+              <span class="highlight">Cohesion</span> (Water ❤️ Water)
+            </h3>
+            <p><strong>Cohesion</strong> is the attraction between molecules of the <span class="highlight">same substance</span>. For water, this occurs because water molecules are polar—having a positive hydrogen end and a negative oxygen end. They form dynamic <strong>hydrogen bonds</strong> with one another.</p>
+            <div class="biology-infotip">
+              <p>🧬 <strong>Biology 101 Key Term: Surface Tension</strong>. Cohesion at the surface of a body of water creates a thin "skin" because the top water molecules are pulled tightly downward and inward. This allows things like leaves and water insects to float safely on top!</p>
+            </div>
+          </div>
+
+          <div class="concept-card">
+            <h3>
+              <span class="water-highlight">Adhesion</span> (Water ❤️ Other Things)
+            </h3>
+            <p><strong>Adhesion</strong> is the attraction between molecules of <span class="water-highlight">different substances</span>. Water molecules will enthusiastically stick to other polar or charged surfaces, such as glass beaker walls, cotton towels, and plant vascular walls.</p>
+            <div class="biology-infotip">
+              <p>🧪 <strong>Biology 101 Key Term: The Meniscus</strong>. When water is placed in a glass graduated cylinder, it climbs the sides of the glass due to adhesion. This creates a curved dip called a <strong>concave meniscus</strong>. Always read the volume at the absolute <strong>bottom</strong> of this curve!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2 CONTENT: BIOLOGICAL IMPACT -->
+        <div id="panel-capillary" class="tab-content" role="tabpanel" aria-labelledby="tab-capillary">
+          <div class="concept-card">
+            <h3>
+              <span class="highlight">Capillary Action</span> in Nature
+            </h3>
+            <p>When you combine <strong>cohesion</strong> and <strong>adhesion</strong>, a powerful physical phenomenon occurs: <strong>Capillary Action</strong>. This is the movement of water upwards through a narrow tube or porous material, entirely against the pull of gravity.</p>
+            <ul class="bullet-list" style="margin-top: 0.75rem;">
+              <li><strong>Adhesion</strong> pulls the water molecules upward along the polar walls of the tube.</li>
+              <li><strong>Cohesion</strong> drags the rest of the water molecules behind, keeping the fluid column intact.</li>
+              <li><strong>Diameter Effect:</strong> Look at the simulator! If you make the tube narrower, the fluid rises <em>significantly higher</em> because there is more wall-contact area relative to the weight of the water column.</li>
+            </ul>
+          </div>
+
+          <div class="concept-card">
+            <h3> How Giant Trees Drink (Transpiration)</h3>
+            <p>Giant redwood trees do not have mechanical pumps to drink water. Instead, they rely on a process called <strong>Transpirational Pull</strong>, powered by adhesion and cohesion.</p>
+            <div class="biology-infotip" style="background: rgba(123, 44, 191, 0.08); border-left-color: var(--accent-purple);">
+              <p>🍃 <strong>The Ascent of Sap:</strong> As water evaporates from microscopic pores in plant leaves (stomata), it pulls on the molecular chain of water below it. Thanks to <strong>cohesion</strong>, the chain of water doesn't break. Thanks to <strong>adhesion</strong>, the water clings to the walls of the tree's microscopic water-pipes (xylem), climbing all the way from the roots up to the canopy!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3 CONTENT: CONCEPT QUIZ -->
+        <div id="panel-quiz" class="tab-content" role="tabpanel" aria-labelledby="tab-quiz">
+          <div id="quiz-question-box" class="quiz-container">
+            <div class="question-progress" id="quiz-progress" style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">
+              Question 1 of 3
+            </div>
+            <div class="question-text" id="question-text">
+              What biological concept explains why a water strider bug can walk across the surface of a pond?
+            </div>
+            <div class="options-list" id="options-list">
+              <!-- Rendered dynamically via JS -->
+            </div>
+            <div class="quiz-feedback" id="quiz-feedback">
+              <!-- Feedback text here -->
+            </div>
+            <div class="quiz-footer">
+              <span style="font-size: 0.9rem; color: var(--text-secondary);" id="quiz-score-live">Score: 0/0</span>
+              <button id="btn-next-question" class="btn-next" disabled>Next Question</button>
+            </div>
+          </div>
+
+          <!-- Score summary view (hidden initially) -->
+          <div id="quiz-score-box" class="score-panel" style="display: none;">
+            <div class="score-circle">
+              <span class="score-num" id="score-percentage">100%</span>
+              <span class="score-total" id="score-fraction">3/3 Correct</span>
+            </div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--accent-cyan);">Biology 101 Approved!</h3>
+            <p id="score-feedback" style="color: var(--text-secondary); margin-bottom: 1.5rem;">Fantastic! You've mastered the fundamentals of adhesion, cohesion, and water's life-giving properties.</p>
+            <button id="btn-restart-quiz" class="btn-reset-quiz">Retake Quiz</button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>Created for Biology 101 Learners. Driven by the hydrogen-bonding forces of water.</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

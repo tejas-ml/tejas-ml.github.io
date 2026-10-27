@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Sorting Visualizer</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <h3>Sorting Algorithms</h3>
+                <div class="algorithm-buttons">
+                    <button class="btn algorithm-btn" data-algorithm="bubbleSort">Bubble Sort</button>
+                    <button class="btn algorithm-btn" data-algorithm="quickSort">Quick Sort</button>
+                    <button class="btn algorithm-btn" data-algorithm="mergeSort">Merge Sort</button>
+                    <button class="btn algorithm-btn" data-algorithm="heapSort">Heap Sort</button>
+                    <button class="btn algorithm-btn" data-algorithm="insertionSort">Insertion Sort</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Array Settings</h3>
+                <div class="settings">
+                    <div class="setting">
+                        <label for="array-size">Array Size:</label>
+                        <input type="range" id="array-size" min="5" max="100" value="50" class="slider">
+                        <span id="size-value">50</span>
+                    </div>
+                    <div class="setting">
+                        <label for="sort-speed">Sort Speed:</label>
+                        <input type="range" id="sort-speed" min="1" max="20" value="15" class="slider">
+                        <span id="speed-value">15</span>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn primary" onclick="generateNewArray()">Generate New Array</button>
+                        <button class="btn danger" id="stop-button" onclick="stopSorting()" disabled>STOP</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization-container">
+            <div class="array-container" id="array-container"></div>
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3>Time Complexity</h3>
+                    <div id="time-complexity" class="complexity">
+                        <div class="complexity-item">
+                            <span>Best:</span>
+                            <span id="time-best">-</span>
+                        </div>
+                        <div class="complexity-item">
+                            <span>Average:</span>
+                            <span id="time-avg">-</span>
+                        </div>
+                        <div class="complexity-item">
+                            <span>Worst:</span>
+                            <span id="time-worst">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>Space Complexity</h3>
+                    <div id="space-complexity" class="complexity">
+                        <div class="complexity-item">
+                            <span>Best:</span>
+                            <span id="space-best">-</span>
+                        </div>
+                        <div class="complexity-item">
+                            <span>Average:</span>
+                            <span id="space-avg">-</span>
+                        </div>
+                        <div class="complexity-item">
+                            <span>Worst:</span>
+                            <span id="space-worst">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>Current Status</h3>
+                    <div id="status" class="status">Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+    <script src="sorts.js"></script>
+</body>
+
+</html>

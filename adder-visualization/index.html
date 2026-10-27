@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binary Adder — Circuit Visualization</title>
+    <meta
+      name="description"
+      content="Visualize a 4-bit ripple-carry adder. Choose two binary numbers and watch full-adder gates compute the sum."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,620;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <a class="skip" href="#operands">Skip to number selection</a>
+
+    <div class="page">
+      <header class="masthead">
+        <div class="masthead-meta">
+          <p class="kicker">Fig. 01 · Combinational logic</p>
+          <p class="kicker">4-bit ripple-carry</p>
+        </div>
+        <h1>Binary Adder</h1>
+        <p class="lede">
+          Choose two numbers. The circuit below is a chain of four full adders —
+          each bit is summed locally, and the carry ripples toward the high bit.
+        </p>
+      </header>
+
+      <section id="operands" class="panel operands" aria-labelledby="operands-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="operands-title">Select the addends</h2>
+            <p>Toggle any bit, or step the decimal value. Range is 0–15.</p>
+          </div>
+        </div>
+
+        <div id="operand-mount"></div>
+
+        <div class="presets" role="group" aria-label="Example pairs">
+          <span class="presets-label">Examples</span>
+          <button type="button" class="chip" data-a="6" data-b="7">6 + 7</button>
+          <button type="button" class="chip" data-a="11" data-b="5">11 + 5</button>
+          <button type="button" class="chip" data-a="15" data-b="1">15 + 1</button>
+          <button type="button" class="chip" data-a="4" data-b="2">4 + 2</button>
+          <button type="button" class="chip" data-a="9" data-b="9">9 + 9</button>
+          <button type="button" class="chip" id="random-pair">Random</button>
+        </div>
+      </section>
+
+      <section class="hero-sum" aria-live="polite">
+        <p class="hero-kicker">Result</p>
+        <p class="hero-eq" id="hero-eq"></p>
+        <p class="hero-words" id="hero-words"></p>
+      </section>
+
+      <section class="panel column-panel" aria-labelledby="column-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="column-title">Column addition</h2>
+            <p>The same sum written the way you would add binary on paper. Small digits are carries.</p>
+          </div>
+        </div>
+        <div id="column-mount" class="column-mount"></div>
+      </section>
+
+      <section class="panel circuit-panel" aria-labelledby="circuit-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="circuit-title">Ripple-carry chain</h2>
+            <p>Least-significant bit on the right. Click a full adder to inspect its gates.</p>
+          </div>
+          <button type="button" class="btn-trace" id="trace-btn">
+            Watch carry ripple
+          </button>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <span><i class="swatch high"></i> High · 1</span>
+          <span><i class="swatch low"></i> Low · 0</span>
+          <span><i class="swatch selected"></i> Selected stage</span>
+        </div>
+        <div class="circuit-scroll">
+          <div id="chain-mount"></div>
+        </div>
+      </section>
+
+      <section class="panel detail-panel" aria-labelledby="detail-title">
+        <div class="panel-head">
+          <div>
+            <h2 id="detail-title">Full adder · bit <span id="stage-label">0</span></h2>
+            <p id="detail-sub">Five gates: two XOR, two AND, one OR.</p>
+          </div>
+          <p class="place-tag" id="place-tag"></p>
+        </div>
+        <div class="detail-grid">
+          <div class="circuit-scroll">
+            <div id="detail-mount"></div>
+          </div>
+          <aside class="equations" id="equations"></aside>
+        </div>
+      </section>
+
+      <section class="panel explain" aria-labelledby="explain-title">
+        <h2 id="explain-title">How the circuit adds</h2>
+        <div class="explain-grid">
+          <article>
+            <h3>Full adder</h3>
+            <p>
+              One bit of A, one bit of B, and a carry-in. XOR computes the sum
+              bit; AND and OR compute the carry-out.
+            </p>
+            <p class="mono-note">S = A ⊕ B ⊕ C<sub>in</sub></p>
+          </article>
+          <article>
+            <h3>Generate &amp; propagate</h3>
+            <p>
+              A ∧ B <em>generates</em> a carry regardless of C<sub>in</sub>.
+              A ⊕ B <em>propagates</em> an incoming carry to the next bit.
+            </p>
+            <p class="mono-note">C<sub>out</sub> = (A ∧ B) ∨ (C<sub>in</sub> ∧ (A ⊕ B))</p>
+          </article>
+          <article>
+            <h3>Ripple</h3>
+            <p>
+              C<sub>out</sub> of bit <i>i</i> is C<sub>in</sub> of bit
+              <i>i</i>+1. The carry must travel the whole chain, which is why
+              this adder is simple — and slow in silicon.
+            </p>
+            <p class="mono-note">C<sub>0</sub> = 0</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="colophon">
+        <p>4-bit ripple-carry adder · IEEE-style gate symbols · A, B ∈ {0…15}</p>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
