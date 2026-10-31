@@ -1,6 +1,6 @@
 (function () {
   const SCHOLAR_URL =
-    'https://scholar.google.com/citations?user=sLSmk9AAAAAJ&hl=en';
+    'https://scholar.google.com/citations?user=-2meKdkAAAAJ&hl=en';
 
   function normalizePublications(data) {
     if (Array.isArray(data)) return data;

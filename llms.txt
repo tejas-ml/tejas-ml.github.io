@@ -8,7 +8,7 @@
 - Location: Orlando, FL, USA
 - GitHub: https://github.com/tejas-ml
 - LinkedIn: https://www.linkedin.com/in/tejas-ml
-- Google Scholar: https://scholar.google.com/citations?user=sLSmk9AAAAAJ&hl=en
+- Google Scholar: https://scholar.google.com/citations?user=-2meKdkAAAAJ&hl=en
 - ResearchGate: https://www.researchgate.net/profile/Tejas-Mahajan-5
 - LeetCode: https://leetcode.com/u/tejas-ml/
 - CodeChef: https://www.codechef.com/users/tejas_ml

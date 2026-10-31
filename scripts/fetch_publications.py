@@ -16,7 +16,7 @@ import time
 
 from scholarly import ProxyGenerator, scholarly
 
-SCHOLAR_ID = "sLSmk9AAAAAJ"
+SCHOLAR_ID = "-2meKdkAAAAJ"
 MAX_ATTEMPTS = 4
 OUTPUT_FILE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
