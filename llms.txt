@@ -9,11 +9,10 @@
 - GitHub: https://github.com/tejas-ml
 - LinkedIn: https://www.linkedin.com/in/tejas-ml
 - Google Scholar: https://scholar.google.com/citations?user=sLSmk9AAAAAJ&hl=en
-- ResearchGate: https://www.researchgate.net/profile/tejas-Mahajan-5
-- X (Twitter): https://x.com/tejas-ml
+- ResearchGate: https://www.researchgate.net/profile/Tejas-Mahajan-5
 - LeetCode: https://leetcode.com/u/tejas-ml/
 - CodeChef: https://www.codechef.com/users/tejas_ml
-- Codeforces: https://codeforces.com/profile/tejas_ml
+- Codeforces: https://codeforces.com/profile/tejas-ml
 - UCF Lab Page: https://www.cs.ucf.edu/compbio/people/
 
 ## Education
