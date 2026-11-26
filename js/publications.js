@@ -20,16 +20,21 @@
     return '';
   }
 
-  function formatVenue(pub) {
-    return pub.journal || pub.venue || pub.publisher || '';
+  function formatStatus(pub) {
+    return pub.status || pub.journal || pub.venue || pub.publisher || '';
+  }
+
+  function isChronoGRN(pub) {
+    return /chronogrn/i.test(pub.title || '');
   }
 
   function renderPublication(pub) {
     const year = getYear(pub);
     const title = pub.title || 'Untitled';
     const authors = formatAuthors(pub);
-    const venue = formatVenue(pub);
+    const status = formatStatus(pub);
     const link = pub.link || '';
+    const code = pub.code || '';
     const citations =
       typeof pub.citations === 'number' && pub.citations > 0
         ? `${pub.citations} citation${pub.citations === 1 ? '' : 's'}`
@@ -61,14 +66,27 @@
     }
 
     const metaParts = [];
-    if (venue) metaParts.push(venue);
+    if (status) metaParts.push(status);
     if (year) metaParts.push(String(year));
     if (citations) metaParts.push(citations);
 
-    if (metaParts.length) {
+    if (metaParts.length || code) {
       const venueEl = document.createElement('div');
       venueEl.className = 'pub-venue';
-      venueEl.textContent = metaParts.join(' · ');
+      if (metaParts.length) {
+        venueEl.appendChild(document.createTextNode(metaParts.join(' · ')));
+      }
+      if (code) {
+        if (metaParts.length) {
+          venueEl.appendChild(document.createTextNode(' · '));
+        }
+        const a = document.createElement('a');
+        a.href = code;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = 'Code';
+        venueEl.appendChild(a);
+      }
       entry.appendChild(venueEl);
     }
 
@@ -78,9 +96,9 @@
   function renderFallback(container) {
     container.innerHTML = `
       <div class="placeholder">
-        Could not load publications. See
+        Could not load this list. See
         <a href="${SCHOLAR_URL}" target="_blank" rel="noopener">Google Scholar</a>
-        for the full list.
+        for current records.
       </div>
     `;
   }
@@ -95,12 +113,14 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
-      const publications = normalizePublications(data);
+      const publications = normalizePublications(data).filter(
+        (pub) => pub.title && !isChronoGRN(pub)
+      );
 
       if (!publications.length) {
         container.innerHTML = `
           <div class="placeholder">
-            No publications listed yet. See
+            No manuscripts or research software listed yet. See
             <a href="${SCHOLAR_URL}" target="_blank" rel="noopener">Google Scholar</a>.
           </div>
         `;

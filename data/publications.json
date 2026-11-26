@@ -9,6 +9,8 @@
       "T Mahajan"
     ],
     "journal": "",
+    "status": "Research software",
+    "code": "https://github.com/tejas-ml/tejas-ml/tree/main/projects/FairDRAM",
     "citations": 0
   },
   {
@@ -21,6 +23,8 @@
       "T Mahajan"
     ],
     "journal": "",
+    "status": "Research software",
+    "code": "https://github.com/tejas-ml/SyntheticShield",
     "citations": 0
   },
   {
@@ -33,6 +37,8 @@
       "T Mahajan"
     ],
     "journal": "",
+    "status": "Research software",
+    "code": "https://github.com/tejas-ml/tejas-ml/tree/main/projects/ModelCardSec",
     "citations": 0
   },
   {
@@ -44,7 +50,9 @@
     "authors": [
       "T Mahajan"
     ],
-    "journal": "GitHub repository",
+    "journal": "",
+    "status": "Research software",
+    "code": "https://github.com/tejas-ml/tejas-ml/tree/main/projects/PromptLeakDetector",
     "citations": 0
   },
   {
@@ -57,6 +65,8 @@
       "T Mahajan"
     ],
     "journal": "",
+    "status": "Research software",
+    "code": "https://github.com/tejas-ml/RAGGuard",
     "citations": 0
   },
   {
@@ -68,7 +78,9 @@
     "authors": [
       "T Mahajan"
     ],
-    "journal": "ResearchGate",
+    "journal": "ResearchGate preprint",
+    "status": "ResearchGate preprint",
+    "code": "",
     "citations": 0
   }
 ]

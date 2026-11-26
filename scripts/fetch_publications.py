@@ -92,7 +92,24 @@ def main():
         sys.exit("Could not fetch publications and no existing file to keep")
 
     publications = [normalize(p) for p in pubs]
-    publications = [p for p in publications if p["title"]]
+    publications = [
+        p for p in publications
+        if p["title"] and "chronogrn" not in p["title"].lower()
+    ]
+
+    # Preserve locally maintained status/code labels when Scholar is re-fetched.
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            with open(OUTPUT_FILE, encoding="utf-8") as existing:
+                previous = {item.get("title"): item for item in json.load(existing)}
+            for item in publications:
+                prior = previous.get(item["title"], {})
+                for key in ("status", "code"):
+                    if prior.get(key) and not item.get(key):
+                        item[key] = prior[key]
+        except (OSError, json.JSONDecodeError, TypeError):
+            pass
+
     publications.sort(key=lambda p: (p["date"][0] if p["date"] else 0), reverse=True)
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
