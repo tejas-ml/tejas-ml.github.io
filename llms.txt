@@ -35,6 +35,7 @@ These items also appear on Google Scholar. They are research software or manuscr
 
 ## Site Pages
 - [Home](https://tejas-ml.github.io/index.html): Biography, education, highlights, and profile links.
+- [Blog](https://tejas-ml.github.io/blog/): Technical notes on machine learning, AI security, computational biology, and systems.
 - [Research](https://tejas-ml.github.io/research.html): Research directions, manuscripts, and research software.
 - [Projects](https://tejas-ml.github.io/projects.html): Interactive demos and open-source repositories across CompBio, Quant Finance, Clinical AI, and Security.
 - [CV](https://tejas-ml.github.io/cv.html): Curriculum Vitae, academic experience, and technical skills.

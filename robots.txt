@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://tejas-ml.github.io/sitemap.xml
+Sitemap: https://tejas-ml.github.io/blog/sitemap-index.xml
